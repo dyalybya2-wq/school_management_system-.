@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - الإدارة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-settings {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-settings:hover {
+            background-color: #229954;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-right: 4px solid #667eea;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        input[type="password"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th {
+            background-color: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: right;
+        }
+
+        .table tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5568d3;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+            flex: none;
+            width: auto;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .close-btn {
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-buttons {
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .btn-settings {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>🏫 الإدارة</h2>
+            <ul>
+                <li><a href="#" class="active">📊 لوحة التحكم</a></li>
+                <li><a href="#students">👨‍🎓 الطلاب</a></li>
+                <li><a href="#teachers">👨‍🏫 المعلمون</a></li>
+                <li><a href="#classes">📚 الفصول</a></li>
+                <li><a href="#subjects">📖 المواد</a></li>
+                <li><a href="#grades">📊 الدرجات</a></li>
+                <li><a href="#reports">📄 التقارير</a></li>
+                <li><a href="#delete-report">🗑️ حذف تقرير</a></li>
+            </ul>
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>لوحة التحكم - الإدارة</h1>
+                <div class="header-buttons">
+                    <button class="btn-settings" onclick="openSettingsModal()">⚙️ الإعدادات</button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>👨‍🎓 عدد الطلاب</h3>
+                    <div class="stat-value" id="studentCount">0</div>
+                </div>
+                <div class="stat-card" style="border-right-color: #27ae60;">
+                    <h3>👨‍🏫 عدد المعلمين</h3>
+                    <div class="stat-value" style="color: #27ae60;" id="teacherCount">0</div>
+                </div>
+                <div class="stat-card" style="border-right-color: #f39c12;">
+                    <h3>📚 عدد الفصول</h3>
+                    <div class="stat-value" style="color: #f39c12;" id="classCount">0</div>
+                </div>
+                <div class="stat-card" style="border-right-color: #e74c3c;">
+                    <h3>📖 عدد المواد</h3>
+                    <div class="stat-value" style="color: #e74c3c;" id="subjectCount">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('students-tab')">👨‍🎓 إدارة الطلاب</button>
+                    <button class="tab-btn" onclick="switchTab('teachers-tab')">👨‍🏫 إدارة المعلمين</button>
+                    <button class="tab-btn" onclick="switchTab('classes-tab')">📚 إدارة الفصول</button>
+                    <button class="tab-btn" onclick="switchTab('subjects-tab')">📖 إدارة المواد</button>
+                    <button class="tab-btn" onclick="switchTab('grades-tab')">📊 تعديل الدرجات</button>
+                    <button class="tab-btn" onclick="switchTab('reports-tab')">📄 التقارير</button>
+                    <button class="tab-btn" onclick="switchTab('delete-report-tab')">🗑️ حذف تقرير</button>
+                </div>
+
+                <div id="students-tab" class="tab-content active">
+                    <h3>إضافة طالب جديد</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="studentName">اسم الطالب:</label>
+                            <input type="text" id="studentName" placeholder="أدخل اسم الطالب">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentId">رقم القيد:</label>
+                            <input type="text" id="studentId" placeholder="أدخل رقم القيد">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">البريد الإلكتروني:</label>
+                            <input type="email" id="studentEmail" placeholder="أدخل البريد الإلكتروني">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentClass">الفصل:</label>
+                            <select id="studentClass">
+                                <option value="">-- اختر فصل --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="addStudent()">➕ إضافة طالب</button>
+                    <div class="success-message" id="studentSuccess"></div>
+                    <div class="error-message" id="studentError"></div>
+
+                    <h3 style="margin-top: 30px;">قائمة الطلاب</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>اسم الطالب</th>
+                                <th>رقم القيد</th>
+                                <th>الفصل</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsList">
+                            <tr><td colspan="4" style="text-align: center; color: #999;">لا توجد طلاب</td></tr>
+                        </tbody>
+		                    </table>
+		                </div>
+
+		                <div id="delete-report-tab" class="tab-content">
+		                    <h3>🗑️ حذف تقرير معلم</h3>
+		                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+		                        <div class="form-group">
+		                            <label for="deleteReportTeacher">اسم المعلم:</label>
+		                            <input type="text" id="deleteReportTeacher" placeholder="أدخل اسم المعلم أو جزء منه">
+		                        </div>
+		                        <div class="form-group">
+		                            <label for="deleteReportMonth">الشهر:</label>
+		                            <select id="deleteReportMonth">
+		                                <option value="">-- اختر شهر --</option>
+		                                <option value="يناير">يناير</option>
+		                                <option value="فبراير">فبراير</option>
+		                                <option value="مارس">مارس</option>
+		                                <option value="أبريل">أبريل</option>
+		                                <option value="مايو">مايو</option>
+		                                <option value="يونيو">يونيو</option>
+		                                <option value="يوليو">يوليو</option>
+		                                <option value="أغسطس">أغسطس</option>
+		                                <option value="سبتمبر">سبتمبر</option>
+		                                <option value="أكتوبر">أكتوبر</option>
+		                                <option value="نوفمبر">نوفمبر</option>
+		                                <option value="ديسمبر">ديسمبر</option>
+		                            </select>
+		                        </div>
+		                    </div>
+		                    <button class="btn btn-danger" onclick="deleteReport()">🗑️ حذف التقرير</button>
+		                    <div class="success-message" id="deleteReportSuccess"></div>
+		                    <div class="error-message" id="deleteReportError"></div>
+		                </div>
+
+	                <div id="delete-report-tab" class="tab-content">
+	                    <h3>🗑️ حذف تقرير معلم</h3>
+	                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+	                        <div class="form-group">
+	                            <label for="deleteReportTeacher">اسم المعلم:</label>
+	                            <input type="text" id="deleteReportTeacher" placeholder="أدخل اسم المعلم أو جزء منه">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="deleteReportMonth">الشهر:</label>
+	                            <select id="deleteReportMonth">
+	                                <option value="">-- اختر شهر --</option>
+	                                <option value="يناير">يناير</option>
+	                                <option value="فبراير">فبراير</option>
+	                                <option value="مارس">مارس</option>
+	                                <option value="أبريل">أبريل</option>
+	                                <option value="مايو">مايو</option>
+	                                <option value="يونيو">يونيو</option>
+	                                <option value="يوليو">يوليو</option>
+	                                <option value="أغسطس">أغسطس</option>
+	                                <option value="سبتمبر">سبتمبر</option>
+	                                <option value="أكتوبر">أكتوبر</option>
+	                                <option value="نوفمبر">نوفمبر</option>
+	                                <option value="ديسمبر">ديسمبر</option>
+	                            </select>
+	                        </div>
+	                    </div>
+	                    <button class="btn btn-danger" onclick="deleteReport()">🗑️ حذف التقرير</button>
+	                    <div class="success-message" id="deleteReportSuccess"></div>
+	                    <div class="error-message" id="deleteReportError"></div>
+	                </div>
+
+                <div id="teachers-tab" class="tab-content">
+                    <h3>إضافة معلم جديد</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="teacherName">اسم المعلم:</label>
+                            <input type="text" id="teacherName" placeholder="أدخل اسم المعلم">
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherJobNumber">الرقم الوظيفي:</label>
+                            <input type="text" id="teacherJobNumber" placeholder="أدخل الرقم الوظيفي">
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherSubject">المادة:</label>
+                            <select id="teacherSubject">
+                                <option value="">-- اختر مادة --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherClass">الفصل:</label>
+                            <select id="teacherClass">
+                                <option value="">-- اختر فصل --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherEmail">البريد الإلكتروني:</label>
+                            <input type="email" id="teacherEmail" placeholder="أدخل البريد الإلكتروني">
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherPhone">رقم الهاتف:</label>
+                            <input type="text" id="teacherPhone" placeholder="أدخل رقم الهاتف">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="addTeacher()">➕ إضافة معلم</button>
+                    <div class="success-message" id="teacherSuccess"></div>
+                    <div class="error-message" id="teacherError"></div>
+
+                    <h3 style="margin-top: 30px;">قائمة المعلمين</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>اسم المعلم</th>
+                                <th>الرقم الوظيفي</th>
+                                <th>المادة</th>
+                                <th>الفصل</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachersList">
+                            <tr><td colspan="5" style="text-align: center; color: #999;">لا يوجد معلمون</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="classes-tab" class="tab-content">
+                    <h3>إضافة فصل جديد</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="className">السنة الدراسية:</label>
+                            <select id="className">
+                                <option value="">-- اختر سنة --</option>
+                                <option value="أولى ثانوي">أولى ثانوي</option>
+                                <option value="ثانية ثانوي">ثانية ثانوي</option>
+                                <option value="ثالثة ثانوي">ثالثة ثانوي</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="classSection">القسم:</label>
+                            <select id="classSection">
+                                <option value="">-- اختر قسم --</option>
+                                <option value="أ">أ</option>
+                                <option value="ب">ب</option>
+                                <option value="ج">ج</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="addClass()">➕ إضافة فصل</button>
+                    <div class="success-message" id="classSuccess"></div>
+                    <div class="error-message" id="classError"></div>
+
+                    <h3 style="margin-top: 30px;">قائمة الفصول</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>السنة الدراسية</th>
+                                <th>القسم</th>
+                                <th>عدد الطلاب</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classesList">
+                            <tr><td colspan="4" style="text-align: center; color: #999;">لا توجد فصول</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="subjects-tab" class="tab-content">
+                    <h3>إضافة مادة جديدة</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="subjectName">اسم المادة:</label>
+                            <input type="text" id="subjectName" placeholder="أدخل اسم المادة">
+                        </div>
+                        <div class="form-group">
+                            <label for="subjectYear">السنة الدراسية:</label>
+                            <select id="subjectYear">
+                                <option value="">-- اختر سنة --</option>
+                                <option value="أولى ثانوي">أولى ثانوي</option>
+                                <option value="ثانية ثانوي">ثانية ثانوي</option>
+                                <option value="ثالثة ثانوي">ثالثة ثانوي</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="addSubject()">➕ إضافة مادة</button>
+                    <div class="success-message" id="subjectSuccess"></div>
+                    <div class="error-message" id="subjectError"></div>
+
+                    <h3 style="margin-top: 30px;">قائمة المواد</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>اسم المادة</th>
+                                <th>السنة الدراسية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectsList">
+                            <tr><td colspan="3" style="text-align: center; color: #999;">لا توجد مواد</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="grades-tab" class="tab-content">
+                    <h3>تعديل ومراجعة الدرجات</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="gradeStudentName">اسم الطالب:</label>
+                            <input type="text" id="gradeStudentName" placeholder="أدخل اسم الطالب">
+                        </div>
+                        <div class="form-group">
+                            <label for="gradeStudentId">رقم القيد:</label>
+                            <input type="text" id="gradeStudentId" placeholder="أدخل رقم القيد">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="searchGrades()">🔍 بحث</button>
+
+                    <div id="gradesResult" style="margin-top: 20px; display: none;">
+                        <h4>نتائج البحث:</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>المادة</th>
+                                    <th>الدرجة</th>
+                                    <th>التقدير</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradesResultBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="reports-tab" class="tab-content">
+                    <h3>التقارير المرسلة من المعلمين</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>اسم المعلم</th>
+                                <th>المادة</th>
+                                <th>الفصل</th>
+                                <th>الشهر</th>
+                                <th>التاريخ</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsList">
+                            <tr><td colspan="6" style="text-align: center; color: #999;">لا توجد تقارير</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
+            <div class="modal-header">⚙️ إعدادات الإدارة</div>
+
+            <div style="margin-bottom: 30px;">
+                <h4 style="margin-bottom: 15px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">🔐 تغيير كلمة المر	                <p style="color: #667eea; font-weight: 600; text-align: center; margin-top: 10px;">تم نقل وظيفة تغيير كلمة المرور إلى صفحة تسجيل الدخول.</p>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom: 15px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">👤 تغيير اسم المستخدم</h4>
+                <div class="form-group">
+                    <label for="adminPassword2">كلمة المرور (للتحقق):</label>
+                    <input type="password" id="adminPassword2" placeholder="أدخل كلمة المرور">
+                </div>
+                <div class="form-group">
+                    <label for="newUsername">اسم المستخدم الجديد:</label>
+                    <input type="text" id="newUsername" placeholder="أدخل اسم المستخدم الجديد">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="changeUsername()">✓ تحديث اسم المستخدم</button>
+                <div class="success-message" id="usernameSuccess"></div>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html>

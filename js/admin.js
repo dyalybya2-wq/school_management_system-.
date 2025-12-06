@@ -713,3 +713,45 @@ function logout() {
         window.location.href = 'login.html';
     }
 }
+
+// Delete report
+function deleteReport() {
+    const teacherName = document.getElementById('deleteReportTeacher').value.trim();
+    const month = document.getElementById('deleteReportMonth').value;
+    const successDiv = document.getElementById('deleteReportSuccess');
+    const errorDiv = document.getElementById('deleteReportError');
+
+    successDiv.style.display = 'none';
+    errorDiv.style.display = 'none';
+
+    if (!teacherName || !month) {
+        errorDiv.textContent = 'الرجاء إدخال اسم المعلم واختيار الشهر.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    if (confirm(`هل أنت متأكد من حذف جميع تقارير المعلم "${teacherName}" لشهر "${month}"؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+        const initialLength = systemData.reports.length;
+        
+        // Filter out reports that match the criteria
+        systemData.reports = systemData.reports.filter(report => {
+            const nameMatch = report.teacherName.includes(teacherName);
+            const monthMatch = report.month === month;
+            return !(nameMatch && monthMatch);
+        });
+
+        const deletedCount = initialLength - systemData.reports.length;
+
+        if (deletedCount > 0) {
+            saveSystemData();
+            displayReports();
+            successDiv.textContent = `✓ تم حذف ${deletedCount} تقرير(تقارير) بنجاح!`;
+            successDiv.style.display = 'block';
+            document.getElementById('deleteReportTeacher').value = '';
+            document.getElementById('deleteReportMonth').value = '';
+        } else {
+            errorDiv.textContent = 'لم يتم العثور على تقارير مطابقة للحذف.';
+            errorDiv.style.display = 'block';
+        }
+    }
+}
