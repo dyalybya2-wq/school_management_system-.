@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - الطالب</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-info p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-right: 4px solid #667eea;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th {
+            background-color: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: right;
+        }
+
+        .table tr:hover {
+            background-color: #f5f7fa;
+        }
+
+        .rating-badge {
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .rating-excellent {
+            background-color: #27ae60;
+        }
+
+        .rating-very-good {
+            background-color: #3498db;
+        }
+
+        .rating-good {
+            background-color: #f39c12;
+        }
+
+        .rating-acceptable {
+            background-color: #e67e22;
+        }
+
+        .rating-fail {
+            background-color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>🏫 الطالب</h2>
+            <ul>
+                <li><a href="#" class="active">📊 لوحة التحكم</a></li>
+                <li><a href="#grades">📝 الدرجات</a></li>
+                <li><a href="#attendance">✓ الحضور</a></li>
+            </ul>
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1>لوحة التحكم - الطالب</h1>
+                </div>
+                <div class="user-info">
+                    <p><strong>الاسم:</strong> <span id="studentName">-</span></p>
+                    <p><strong>رقم القيد:</strong> <span id="studentId">-</span></p>
+                    <p><strong>الفصل:</strong> <span id="studentClass">-</span></p>
+
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>📝 عدد المواد</h3>
+                    <div class="stat-value" id="subjectCount">0</div>
+                </div>
+                <div class="stat-card" style="border-right-color: #27ae60;">
+                    <h3>📊 المعدل العام</h3>
+                    <div class="stat-value" style="color: #27ae60;" id="averageGrade">0%</div>
+                </div>
+                <div class="stat-card" style="border-right-color: #f39c12;">
+                    <h3>✓ الحضور</h3>
+                    <div class="stat-value" style="color: #f39c12;" id="attendanceRate">0%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📝 كشف الدرجات</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>المادة</th>
+                            <th>الدرجة</th>
+                            <th>التقدير</th>
+                            <th>النسبة المئوية</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gradesTableBody">
+                        <tr><td colspan="4" style="text-align: center; color: #999;">لا توجد درجات</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>📄 التقرير</h3>
+                <div id="reportContent" style="color: #666; line-height: 1.8;">
+                    <p>لا يوجد تقرير حتى الآن</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/student.js"></script>
+</body>
+</html>

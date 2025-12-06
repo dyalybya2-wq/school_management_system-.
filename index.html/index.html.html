@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - نظام إدارة المدرسة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: #5568d3;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .demo-info {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #004085;
+        }
+
+        .demo-info h4 {
+            margin-bottom: 10px;
+            color: #004085;
+        }
+
+        .demo-info p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+
+            .logo h1 {
+                font-size: 22px;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🏫 نظام إدارة المدرسة</h1>
+            <p>نظام متكامل لإدارة الدرجات والطلاب والمعلمين</p>
+	        </div>
+
+	        <!-- Change Password Tab -->
+	        <div id="change-password-tab" class="tab-content">
+	            <div class="error-message" id="changePassError"></div>
+	            <div class="success-message" id="changePassSuccess"></div>
+
+	            <div class="form-group">
+	                <label for="changePassCurrentPassword">كلمة المرور الحالية (للإدارة):</label>
+	                <input type="password" id="changePassCurrentPassword" placeholder="أدخل كلمة المرور الحالية">
+	            </div>
+
+	            <div class="form-group">
+	                <label for="changePassNewPassword">كلمة المرور الجديدة:</label>
+	                <input type="password" id="changePassNewPassword" placeholder="أدخل كلمة المرور الجديدة">
+	            </div>
+
+	            <div class="form-group">
+	                <label for="changePassConfirmPassword">تأكيد كلمة المرور الجديدة:</label>
+	                <input type="password" id="changePassConfirmPassword" placeholder="أعد إدخال كلمة المرور الجديدة">
+	            </div>
+
+	            <button class="btn-login" onclick="changePassword()">تغيير كلمة المرور</button>
+	        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('student-tab')">👨‍🎓 طالب</button>
+            <button class="tab-btn" onclick="switchTab('teacher-tab')">👨‍🏫 معلم</button>
+	            <button class="tab-btn" onclick="switchTab('admin-tab', event)">🔐 إدارة</button>
+	            <button class="tab-btn" onclick="switchTab('change-password-tab', event)">🔑 تغيير كلمة المرور</button>
+        </div>
+
+        <!-- Student Tab -->
+	        <div id="student-tab" class="tab-content active">
+            <div class="error-message" id="studentError"></div>
+            <div class="success-message" id="studentSuccess"></div>
+
+            <div class="form-group">
+                <label for="studentName">اسم الطالب:</label>
+                <input type="text" id="studentName" placeholder="أدخل اسمك">
+            </div>
+
+            <div class="form-group">
+                <label for="studentId">رقم القيد:</label>
+                <input type="text" id="studentId" placeholder="أدخل رقم قيدك">
+            </div>
+
+            <button class="btn-login" onclick="loginStudent()">تسجيل الدخول</button>
+
+	            <!-- بيانات التجريب تم إزالتها بناءً على طلب المستخدم -->
+        </div>
+
+        <!-- Teacher Tab -->
+        <div id="teacher-tab" class="tab-content">
+            <div class="error-message" id="teacherError"></div>
+            <div class="success-message" id="teacherSuccess"></div>
+
+            <div class="form-group">
+                <label for="teacherName">اسم المعلم:</label>
+                <input type="text" id="teacherName" placeholder="أدخل اسمك">
+            </div>
+
+            <div class="form-group">
+                <label for="teacherJobNumber">الرقم الوظيفي:</label>
+                <input type="text" id="teacherJobNumber" placeholder="أدخل رقمك الوظيفي">
+            </div>
+
+            <button class="btn-login" onclick="loginTeacher()">تسجيل الدخول</button>
+
+	            <!-- بيانات التجريب تم إزالتها بناءً على طلب المستخدم -->
+        </div>
+
+        <!-- Admin Tab -->
+        <div id="admin-tab" class="tab-content">
+            <div class="error-message" id="adminError"></div>
+            <div class="success-message" id="adminSuccess"></div>
+
+            <div class="form-group">
+                <label for="adminUsername">اسم المستخدم:</label>
+                <input type="text" id="adminUsername" placeholder="أدخل اسم المستخدم">
+            </div>
+
+            <div class="form-group">
+                <label for="adminPassword">كلمة المرور:</label>
+                <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور">
+            </div>
+
+            <button class="btn-login" onclick="loginAdmin()">تسجيل الدخول</button>
+
+	            <!-- بيانات التجريب تم إزالتها بناءً على طلب المستخدم -->
+        </div>
+    </div>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>
